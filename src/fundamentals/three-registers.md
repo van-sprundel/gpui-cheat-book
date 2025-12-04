@@ -47,7 +47,7 @@ struct CounterView {
 }
 
 impl Render for CounterView {
-    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, cx: &mut ViewContext<Self>) -> impl IntoElement {
         let count = self.counter.read(cx).count;
 
         div()
@@ -161,7 +161,7 @@ struct ListView {
 }
 
 impl Render for ListView {
-    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, cx: &mut ViewContext<Self>) -> impl IntoElement {
         let items = self.state.read(cx).items.clone();
 
         // Using built-in elements (div, uniform_list)

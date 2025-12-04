@@ -86,9 +86,9 @@ Application::new().run(|cx: &mut App| {
 
     let second_counter = cx.new(|cx| {
         // Set up observation during creation
-        cx.observe(&first_counter, |second, first, cx| {
+        cx.observe(&first_counter, |second, cx| {
             // This runs whenever first_counter calls cx.notify()
-            second.count = first.read(cx).count * 2;
+            second.count = first_counter.read(cx).count * 2;
         })
         .detach(); // Keep observing until entities are dropped
 
@@ -106,7 +106,8 @@ Application::new().run(|cx: &mut App| {
 ```
 
 **Key points**:
-- The observer gets `&mut Self` (the observer) and `Entity<Observed>` (handle to observed)
+- The observer callback gets `&mut Self` (the observer) and `&mut Context<Self>`
+- Access the observed entity using its handle from the outer scope
 - Call `.detach()` to keep the subscription alive until the entities are dropped
 - Or store the `Subscription` and drop it to cancel observation
 
@@ -260,17 +261,17 @@ counter.update(cx, |counter, cx| {
 
 ```rust,ignore
 // ❌ Bad: Subscription dropped immediately
-cx.observe(&other, |this, other, cx| {
+cx.observe(&other, |this, cx| {
     // This will never run!
 });
 
 // ✅ Good: Detach to keep it alive
-cx.observe(&other, |this, other, cx| {
+cx.observe(&other, |this, cx| {
     // This will run whenever `other` notifies
 }).detach();
 
 // ✅ Also good: Store it to control lifetime
-let subscription = cx.observe(&other, |this, other, cx| {
+let subscription = cx.observe(&other, |this, cx| {
     // Runs until subscription is dropped
 });
 self.subscription = Some(subscription);

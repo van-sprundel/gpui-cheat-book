@@ -38,7 +38,7 @@ Extends `App` with window and UI capabilities. Available when you're working wit
 
 **Where you'll see it**:
 ```rust,ignore
-cx.open_window(WindowOptions::default(), |_, cx| {
+cx.open_window(WindowOptions::default(), |cx| {
     // cx is a VisualContext here
     cx.new(|_| MyView::default())
 })
@@ -157,7 +157,7 @@ cx.notify();
 cx.emit(MyEvent { data: 42 });
 
 // Observe another entity
-cx.observe(&other_entity, |this, other, cx| {
+cx.observe(&other_entity, |this, cx| {
     // React to changes
 }).detach();
 
@@ -191,7 +191,7 @@ Application::new().run(|cx: &mut App| {
 - No specific entity in focus
 
 ```rust,ignore
-cx.open_window(WindowOptions::default(), |window, cx| {
+cx.open_window(WindowOptions::default(), |cx| {
     // cx is VisualContext
     cx.new(|_| RootView::default())
 });
@@ -213,13 +213,13 @@ impl MyView {
 
 ## Window and WindowContext
 
-There's also `Window` and `WindowContext` types used during rendering:
+There's also `ViewContext<T>` which is used during rendering:
 
 ```rust,ignore
 impl Render for MyView {
-    fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        // window: access to window-specific state
-        // cx: full Context<MyView> capabilities
+    fn render(&mut self, cx: &mut ViewContext<Self>) -> impl IntoElement {
+        // cx: a ViewContext<Self> with full entity capabilities
+        // window: access to window-specific state via cx.window()
         div().child("Hello")
     }
 }

@@ -35,9 +35,9 @@ Brief introduction (1-2 sentences)
 
 ## Example
 
-\```rust
+```rust
 // Working code example
-\```
+```
 
 ## Explanation
 
@@ -56,9 +56,9 @@ What NOT to do, common mistakes
 
 The best examples come from:
 
-1. **Zed repository** - `~/git/zed/crates/gpui/examples/`
+1. **Zed repository** - `<path-to-zed-repo>/crates/gpui/examples/`
 2. **Zed source code** - Real-world patterns in the editor
-3. **GPUI tests** - `~/git/zed/crates/gpui/tests/`
+3. **GPUI tests** - `<path-to-zed-repo>/crates/gpui/tests/`
 4. **Your own experience** - Patterns you've discovered
 
 ## Priority Areas
