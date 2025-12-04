@@ -58,10 +58,6 @@ Contributions are welcome! Whether you want to:
 
 Please feel free to open issues or pull requests.
 
-## License
-
-TODO: Add license information
-
 ## Acknowledgments
 
 - Inspired by the [Bevy Cheat Book](https://github.com/bevy-cheatbook/bevy-cheatbook)
