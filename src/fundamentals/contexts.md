@@ -21,7 +21,7 @@ The base context for all application-level services. Available everywhere.
 - Manage platform services
 
 **Where you'll see it**:
-```rust
+```rust,ignore
 Application::new().run(|cx: &mut App| {
     // Application startup
 });
@@ -37,7 +37,7 @@ Extends `App` with window and UI capabilities. Available when you're working wit
 - Access to window-specific services
 
 **Where you'll see it**:
-```rust
+```rust,ignore
 cx.open_window(WindowOptions::default(), |_, cx| {
     // cx is a VisualContext here
     cx.new(|_| MyView::default())
@@ -56,7 +56,7 @@ The most powerful context, tied to a specific entity. Extends `VisualContext` wi
 - `cx.entity()` / `cx.weak_entity()` - get handle to self
 
 **Where you'll see it**:
-```rust
+```rust,ignore
 let counter = cx.new(|cx: &mut Context<Counter>| {
     // cx knows it's for a Counter entity
     Counter { count: 0 }
@@ -91,13 +91,13 @@ All context types implement `AppContext`, but not all have access to advanced fe
 
 Available on all contexts:
 
-```rust
+```rust,ignore
 let counter = cx.new(|cx| Counter { count: 0 });
 ```
 
 ### Accessing Entities
 
-```rust
+```rust,ignore
 // Read immutably
 let value = counter.read(cx).count;
 
@@ -110,7 +110,7 @@ counter.update(cx, |counter, cx| {
 
 ### Global State
 
-```rust
+```rust,ignore
 // Define a global
 #[derive(Clone, Default)]
 struct Theme {
@@ -133,7 +133,7 @@ cx.update_global::<Theme, _>(|theme, cx| {
 
 ### Spawning Async Tasks
 
-```rust
+```rust,ignore
 // Spawn on UI thread
 cx.spawn(|cx| async move {
     // Async work that can access cx
@@ -149,7 +149,7 @@ cx.background_spawn(async move {
 
 ### Entity-Level APIs (Context\<T\> only)
 
-```rust
+```rust,ignore
 // Notify observers
 cx.notify();
 
@@ -178,7 +178,7 @@ let weak_self = cx.weak_entity();
 - Managing top-level state
 - Creating initial entities
 
-```rust
+```rust,ignore
 Application::new().run(|cx: &mut App| {
     let app_state = cx.new(|_| AppState::default());
     // Start your app
@@ -190,7 +190,7 @@ Application::new().run(|cx: &mut App| {
 - Working with window-level UI
 - No specific entity in focus
 
-```rust
+```rust,ignore
 cx.open_window(WindowOptions::default(), |window, cx| {
     // cx is VisualContext
     cx.new(|_| RootView::default())
@@ -202,7 +202,7 @@ cx.open_window(WindowOptions::default(), |window, cx| {
 - Reacting to state changes
 - Emitting or observing events
 
-```rust
+```rust,ignore
 impl MyView {
     fn handle_click(&mut self, cx: &mut Context<Self>) {
         self.count += 1;
@@ -215,7 +215,7 @@ impl MyView {
 
 There's also `Window` and `WindowContext` types used during rendering:
 
-```rust
+```rust,ignore
 impl Render for MyView {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         // window: access to window-specific state
@@ -231,7 +231,7 @@ impl Render for MyView {
 
 You can't store contexts, but you can pass them through function calls:
 
-```rust
+```rust,ignore
 impl MyView {
     fn build_ui(&mut self, cx: &mut Context<Self>) -> impl IntoElement {
         self.build_header(cx) // Pass cx to helpers
@@ -245,7 +245,7 @@ impl MyView {
 
 ### Pattern 2: Getting Self Handle
 
-```rust
+```rust,ignore
 let my_view = cx.new(|cx: &mut Context<MyView>| {
     let self_handle = cx.entity(); // Get handle to entity being created
 
@@ -260,7 +260,7 @@ let my_view = cx.new(|cx: &mut Context<MyView>| {
 
 You often receive a less capable context but need a more capable one:
 
-```rust
+```rust,ignore
 // This won't work - can't upgrade context types directly
 // let visual_cx: &mut VisualContext = cx; // ❌
 
@@ -274,7 +274,7 @@ You often receive a less capable context but need a more capable one:
 
 ### Trying to Store Contexts
 
-```rust
+```rust,ignore
 // ❌ Bad: Can't store contexts
 struct MyView {
     cx: Context<MyView>, // Won't compile
@@ -290,7 +290,7 @@ impl MyView {
 
 ### Wrong Context Type
 
-```rust
+```rust,ignore
 // ❌ Bad: Can't notify from App context
 fn update_state(cx: &mut App) {
     cx.notify(); // No such method!
@@ -304,7 +304,7 @@ fn update_state(cx: &mut Context<MyEntity>) {
 
 ### Forgetting WeakEntity for Self-References
 
-```rust
+```rust,ignore
 // ❌ Bad: Strong self-reference creates cycle
 let entity = cx.new(|cx| {
     let self_handle = cx.entity();

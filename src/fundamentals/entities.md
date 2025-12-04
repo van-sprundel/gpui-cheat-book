@@ -15,7 +15,7 @@ This design enables GPUI's observer pattern, where changes to one entity can aut
 
 You create entities using `cx.new()`:
 
-```rust
+```rust,ignore
 use gpui::{App, Application, Entity};
 
 struct Counter {
@@ -39,7 +39,7 @@ The `Entity<Counter>` handle is:
 
 Use `.read(cx)` for immutable access:
 
-```rust
+```rust,ignore
 let count = counter.read(cx).count;
 println!("Count: {}", count);
 ```
@@ -48,7 +48,7 @@ println!("Count: {}", count);
 
 Use `.update(cx, |entity, cx| { ... })` for mutable access:
 
-```rust
+```rust,ignore
 counter.update(cx, |counter, cx| {
     counter.count += 1;
     cx.notify(); // Tell observers about the change
@@ -63,7 +63,7 @@ The callback receives:
 
 When you change an entity's state, call `cx.notify()` to inform observers:
 
-```rust
+```rust,ignore
 counter.update(cx, |counter, cx| {
     counter.count += 1;
     cx.notify(); // Triggers observers
@@ -76,7 +76,7 @@ Without `cx.notify()`, other parts of your app won't know the state changed!
 
 Use `cx.observe()` to react when an entity's state changes:
 
-```rust
+```rust,ignore
 struct Counter {
     count: i32,
 }
@@ -114,7 +114,7 @@ Application::new().run(|cx: &mut App| {
 
 For more structured communication, emit typed events:
 
-```rust
+```rust,ignore
 use gpui::EventEmitter;
 
 struct Counter {
@@ -166,7 +166,7 @@ Application::new().run(|cx: &mut App| {
 
 Multiple views sharing a single state entity:
 
-```rust
+```rust,ignore
 struct AppState {
     user: String,
 }
@@ -189,7 +189,7 @@ let footer = cx.new(|_| FooterView { state: state.clone() });
 
 Child notifies parent of changes:
 
-```rust
+```rust,ignore
 struct ChildView {
     value: String,
 }
@@ -218,7 +218,7 @@ impl ParentView {
 
 Use `WeakEntity` to avoid reference cycles:
 
-```rust
+```rust,ignore
 struct Parent {
     child: Entity<Child>,
 }
@@ -242,7 +242,7 @@ let parent = cx.new(|cx| {
 
 ### Forgetting to Notify
 
-```rust
+```rust,ignore
 // ❌ Bad: Changes but doesn't notify
 counter.update(cx, |counter, _cx| {
     counter.count += 1;
@@ -258,7 +258,7 @@ counter.update(cx, |counter, cx| {
 
 ### Detaching Subscriptions
 
-```rust
+```rust,ignore
 // ❌ Bad: Subscription dropped immediately
 cx.observe(&other, |this, other, cx| {
     // This will never run!
@@ -278,7 +278,7 @@ self.subscription = Some(subscription);
 
 ### Reference Cycles
 
-```rust
+```rust,ignore
 // ❌ Bad: Creates a reference cycle
 struct Node {
     next: Option<Entity<Node>>, // Strong reference

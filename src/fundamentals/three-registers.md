@@ -10,7 +10,7 @@ GPUI offers three different levels of abstraction, called "[registers](https://e
 
 Entities are GPUI's solution for state management. They're similar to `Rc<RefCell<T>>` but owned by GPUI itself, and can only be accessed through the framework's context APIs.
 
-```rust
+```rust,ignore
 struct Counter {
     count: i32,
 }
@@ -41,7 +41,7 @@ See [Entities and Ownership](./entities.md) for details.
 
 Views are entities that can be rendered by implementing the `Render` trait. This is the main way you'll build UIs in GPUI. Think of it like React components or SwiftUI views.
 
-```rust
+```rust,ignore
 struct CounterView {
     counter: Entity<Counter>,
 }
@@ -88,7 +88,7 @@ See [Views and Rendering](./views.md) for details.
 
 Elements are the building blocks that views create. You can implement the `Element` trait directly for complete control over layout and rendering.
 
-```rust
+```rust,ignore
 struct CustomElement {
     // Your state
 }
@@ -149,7 +149,7 @@ You'll typically use all three together:
 2. **Views** render UI based on that state
 3. **Elements** provide the primitives that views are built from (usually you just use the built-in ones like `div()`)
 
-```rust
+```rust,ignore
 // Entity for state
 struct AppState {
     items: Vec<String>,
